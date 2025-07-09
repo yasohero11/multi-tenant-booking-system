@@ -59,3 +59,103 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+# Multi-Tenant Inspection Booking System
+
+## Overview
+A modular, multi-tenant SaaS inspection booking system built with Laravel, using:
+- Spatie Laravel Multitenancy (tenant_id scoping)
+- nwidart/laravel-modules (HMVC structure)
+- Sanctum for API authentication
+- MySQL
+
+## Setup Instructions
+
+1. **Clone the repository**
+2. **Install dependencies**
+   ```bash
+   composer install
+   ```
+3. **Copy and configure your .env**
+   ```bash
+   cp .env.example .env
+   # Set your DB credentials and other settings
+   ```
+4. **Run migrations and seeders**
+   ```bash
+   php artisan migrate:fresh --seed
+   ```
+5. **Serve the app**
+   ```bash
+   php artisan serve
+   ```
+
+## API Usage
+
+### Authentication
+- **Register Tenant & User:**
+  - `POST /api/v1/auth/register`
+  - Body:
+    ```json
+    {
+      "tenant_name": "Acme Inc",
+      "domain": "acme.test",
+      "name": "John Doe",
+      "email": "john@acme.test",
+      "password": "password123",
+      "password_confirmation": "password123"
+    }
+    ```
+- **Login:**
+  - `POST /api/v1/auth/login`
+  - Body:
+    ```json
+    {
+      "email": "john@acme.test",
+      "password": "password123"
+    }
+    ```
+- Use the returned token as a Bearer token for all protected endpoints.
+- For tenant-aware requests, set the header: `X-Tenant-Domain: acme.test`
+
+### Teams
+- **List Teams:** `GET /api/v1/teams`
+- **Create Team:** `POST /api/v1/teams` (body: `{ "name": "Team 1" }`)
+- **Set Availability:** `POST /api/v1/teams/{id}/availability`
+  - Body:
+    ```json
+    {
+      "availabilities": [
+        { "weekday": 1, "start_time": "09:00", "end_time": "17:00" }
+      ]
+    }
+    ```
+- **Get Availability:** `GET /api/v1/teams/{id}/availability`
+- **Generate Slots:** `GET /api/v1/teams/{id}/generate-slots?from=YYYY-MM-DD&to=YYYY-MM-DD`
+
+### Bookings
+- **Create Booking:** `POST /api/v1/bookings`
+  - Body:
+    ```json
+    {
+      "team_id": 1,
+      "date": "2025-07-10",
+      "start_time": "09:00",
+      "end_time": "10:00"
+    }
+    ```
+
+## Multi-Tenancy Notes
+- All data is tenant_id scoped.
+- Tenant is resolved by the `X-Tenant-Domain` header or domain.
+- Registration creates a new tenant if the domain does not exist, or adds a user to an existing tenant.
+
+## Seeding Dummy Data
+- Run `php artisan migrate:fresh --seed` to populate tenants, users, teams, availabilities, and bookings.
+- Default user password: `password123`
+
+## Further Development
+- Add feature tests, API docs, and a React frontend as needed.
+
+---
+**For more details, see the code and comments in each module.**
