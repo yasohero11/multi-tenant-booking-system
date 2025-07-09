@@ -66,9 +66,7 @@ multi-tenant-booking-system/
    # or
    pnpm dev
    ```
-4. **Open your browser**
-   - Frontend: http://localhost:3000
-   - Backend API: http://localhost:8000
+
 
 ## API Documentation
 
