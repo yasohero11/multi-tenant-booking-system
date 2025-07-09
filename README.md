@@ -63,16 +63,36 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 # Multi-Tenant Inspection Booking System
 
 ## Overview
-A modular, multi-tenant SaaS inspection booking system built with Laravel, using:
-- Spatie Laravel Multitenancy (tenant_id scoping)
-- nwidart/laravel-modules (HMVC structure)
-- Sanctum for API authentication
-- MySQL
+A modular, multi-tenant SaaS inspection booking system built with Laravel backend and Next.js frontend, using:
+- **Backend:** Laravel with Spatie Laravel Multitenancy (tenant_id scoping)
+- **Backend:** nwidart/laravel-modules (HMVC structure)
+- **Backend:** Sanctum for API authentication
+- **Backend:** MySQL database
+- **Frontend:** Next.js 14 with TypeScript and Tailwind CSS
+- **Frontend:** React components with shadcn/ui library
+
+## Project Structure
+```
+multi-tenant-booking-system/
+├── app/                    # Laravel core files
+├── Modules/               # Laravel modules (Auth, Tenants, Users, Teams, Availability, Bookings)
+├── reactUI/               # Next.js frontend application
+│   ├── app/              # Next.js app directory (pages, layout)
+│   ├── components/       # React components
+│   │   ├── ui/          # shadcn/ui components
+│   │   └── *.tsx        # Business logic components
+│   ├── hooks/           # Custom React hooks
+│   ├── lib/             # Utility functions and API service
+│   └── public/          # Static assets
+└── database/            # Laravel migrations and seeders
+```
 
 ## Setup Instructions
 
+### Backend (Laravel)
+
 1. **Clone the repository**
-2. **Install dependencies**
+2. **Install PHP dependencies**
    ```bash
    composer install
    ```
@@ -85,12 +105,39 @@ A modular, multi-tenant SaaS inspection booking system built with Laravel, using
    ```bash
    php artisan migrate:fresh --seed
    ```
-5. **Serve the app**
+5. **Serve the Laravel app**
    ```bash
    php artisan serve
    ```
 
-## API Usage
+### Frontend (Next.js)
+
+1. **Navigate to the frontend directory**
+   ```bash
+   cd reactUI
+   ```
+2. **Install Node.js dependencies**
+   ```bash
+   npm install
+   # or
+   pnpm install
+   ```
+3. **Start the development server**
+   ```bash
+   npm run dev
+   # or
+   pnpm dev
+   ```
+4. **Open your browser**
+   - Frontend: http://localhost:3000
+   - Backend API: http://localhost:8000
+
+## API Documentation
+
+### Postman Collection
+📋 **Complete API Collection:** [Multi-Tenant Booking System API](https://www.postman.com/yasohero12/apes/collection/tqdkh4g/booking-system?action=share&creator=27686028)
+
+Import this collection into Postman to test all available endpoints with pre-configured examples.
 
 ### Authentication
 - **Register Tenant & User:**
@@ -144,6 +191,23 @@ A modular, multi-tenant SaaS inspection booking system built with Laravel, using
       "end_time": "10:00"
     }
     ```
+- **Get User Bookings:** `GET /api/v1/bookings`
+
+## Frontend Features
+
+### Components
+- **Auth Form:** Registration and login with tenant selection
+- **Dashboard:** Overview of bookings and system status
+- **Booking Calendar:** Interactive calendar for slot selection and booking
+- **Bookings List:** View and manage user bookings
+- **Teams Manager:** Create teams and manage availability schedules
+
+### Key Features
+- **Multi-tenant Support:** Each tenant has isolated data and domain
+- **Real-time Availability:** Dynamic slot generation based on team schedules
+- **Responsive Design:** Mobile-friendly interface with Tailwind CSS
+- **Type Safety:** Full TypeScript support for better development experience
+- **Modern UI:** Clean, accessible interface using shadcn/ui components
 
 ## Multi-Tenancy Notes
 - All data is tenant_id scoped.
@@ -154,8 +218,27 @@ A modular, multi-tenant SaaS inspection booking system built with Laravel, using
 - Run `php artisan migrate:fresh --seed` to populate tenants, users, teams, availabilities, and bookings.
 - Default user password: `password123`
 
+## Development
+
+### Backend Development
+- **Module Structure:** Each feature is organized as a Laravel module
+- **API Routes:** All endpoints are prefixed with `/api/v1/`
+- **Authentication:** Uses Laravel Sanctum for API tokens
+- **Database:** MySQL with tenant_id scoping
+
+### Frontend Development
+- **Framework:** Next.js 14 with App Router
+- **Styling:** Tailwind CSS with custom design system
+- **Components:** shadcn/ui for consistent UI components
+- **State Management:** React hooks and context
+- **API Integration:** Centralized API service with error handling
+
 ## Further Development
-- Add feature tests, API docs, and a React frontend as needed.
+- Add comprehensive test coverage (unit and integration tests)
+- Implement real-time notifications
+- Add admin dashboard for tenant management
+- Enhance booking workflow with email confirmations
+- Add reporting and analytics features
 
 ---
 **For more details, see the code and comments in each module.**
